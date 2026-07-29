@@ -1,0 +1,9 @@
+body {
+    background-color: oklch(96.018% 0.00343 38.059);
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s ease;
+}
+h1 {
+    color: rgb(53, 2, 2)    ;
+    text-align: center;
+}
