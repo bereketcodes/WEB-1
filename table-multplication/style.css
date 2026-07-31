@@ -1,0 +1,6 @@
+
+body { font-family: Arial, sans-serif; background-color: hsl(0, 4%, 5%); }
+td { background-color: hsl(0, 4%, 15%); color: hsl(0, 4%, 80%); }
+table { border-collapse: collapse; margin: 20px auto; font-family: sans-serif; }
+td, th { border: 1px solid #ccc; padding: 10px; text-align: center; width: 40px; }
+th { background-color: #f2f2f2; font-weight: bold; }

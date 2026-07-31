@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>✅ Doit — Tasks</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>/* ── TOKENS ─────*/
+/* ── TOKENS ─────*/
 :root {
   --bg:        #0f0e17;
   --surface:   #1a1828;
@@ -170,6 +163,17 @@ button.add-btn:active { transform: translateY(0); }
   animation: slideIn .25s ease;
   transition: opacity .22s, transform .22s, box-shadow .2s;
 }
+.edit-input {
+  width: 100%;
+  background: var(--accent2);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .95rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  outline: none;
+}
 .task:hover { box-shadow: 0 6px 28px rgba(255,107,107,.12); }
 .task.removing { opacity: 0; transform: translateX(40px); }
 @keyframes slideIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
@@ -228,166 +232,3 @@ button.add-btn:active { transform: translateY(0); }
   button.add-btn { width: 100%; }
   select { width: 100%; }
 }
-</style>
-</head>
-<body>
-<div class="wrap">
-
-  <header>
-    <div class="brand">
-      <h1>📋 Do<span>it</span></h1>
-      <p id="date-label"></p>
-    </div>
-    <div class="stats-badge">
-      <span id="streak-label">🔥 0 done</span>
-    </div>
-  </header>
-
-  <div class="progress-card">
-    <div class="progress-top">
-      <span class="progress-label" id="progress-label">✨ 0 of 0 completed</span>
-      <span class="progress-pct" id="progress-pct">0%</span>
-    </div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar" id="progress-bar"></div>
-    </div>
-  </div>
-
-  <div class="input-row">
-    <input type="text" id="task-input" placeholder="🖊️  What needs to be done?" maxlength="120" />
-    <select id="cat-select">
-      <option value="Work">💼 Work</option>
-      <option value="Personal">🧘 Personal</option>
-      <option value="Shopping">🛒 Shopping</option>
-      <option value="Health">💪 Health</option>
-      <option value="Other">📌 Other</option>
-    </select>
-    <button class="add-btn" id="add-btn">➕ Add</button>
-  </div>
-
-  <div class="filters" id="filters">
-    <button class="filter-btn active" data-filter="all">🗂️ All</button>
-    <button class="filter-btn" data-filter="active">⏳ Active</button>
-    <button class="filter-btn" data-filter="done">✅ Done</button>
-    <button class="filter-btn" data-filter="Work">💼 Work</button>
-    <button class="filter-btn" data-filter="Personal">🧘 Personal</button>
-    <button class="filter-btn" data-filter="Shopping">🛒 Shopping</button>
-    <button class="filter-btn" data-filter="Health">💪 Health</button>
-  </div>
-
-  <div id="task-list"></div>
-
-  <div class="empty" id="empty-state">
-    <div class="empty-icon">🌿</div>
-    <h3>All clear!</h3>
-    <p>No tasks here. Add one above to get started.</p>
-  </div>
-
-</div>
-<script >// ── STATE ──────────────────────────────────────────
-let tasks = JSON.parse(localStorage.getItem('doit_tasks') || '[]');
-let filter = 'all';
-
-// ── INIT ───────────────────────────────────────────
-document.getElementById('date-label').textContent =
-  new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-
-document.getElementById('task-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') addTask();
-});
-
-document.getElementById('add-btn').addEventListener('click', addTask);
-
-document.getElementById('filters').addEventListener('click', e => {
-  const btn = e.target.closest('.filter-btn');
-  if (!btn) return;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  filter = btn.dataset.filter;
-  render();
-});
-
-// ── HELPERS ────────────────────────────────────────
-function save() {
-  localStorage.setItem('doit_tasks', JSON.stringify(tasks));
-}
-
-function esc(s) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
-const CAT_EMOJI = {
-  Work: '💼', Personal: '🧘', Shopping: '🛒', Health: '💪', Other: '📌'
-};
-
-// ── ACTIONS ────────────────────────────────────────
-function addTask() {
-  const input = document.getElementById('task-input');
-  const text = input.value.trim();
-  if (!text) { input.focus(); return; }
-  const cat = document.getElementById('cat-select').value;
-  tasks.unshift({ id: Date.now(), text, cat, done: false });
-  input.value = '';
-  save();
-  render();
-}
-
-function toggleDone(id) {
-  const t = tasks.find(t => t.id === id);
-  if (t) { t.done = !t.done; save(); render(); }
-}
-
-function deleteTask(id) {
-  const el = document.querySelector(`[data-id="${id}"]`);
-  if (!el) return;
-  el.classList.add('removing');
-  setTimeout(() => {
-    tasks = tasks.filter(t => t.id !== id);
-    save();
-    render();
-  }, 230);
-}
-
-// ── RENDER ─────────────────────────────────────────
-function render() {
-  const visible = tasks.filter(t => {
-    if (filter === 'active') return !t.done;
-    if (filter === 'done')   return t.done;
-    if (CAT_EMOJI[filter])   return t.cat === filter;
-    return true;
-  });
-
-  // Progress
-  const total = tasks.length;
-  const done  = tasks.filter(t => t.done).length;
-  const pct   = total ? Math.round(done / total * 100) : 0;
-  document.getElementById('progress-bar').style.width = pct + '%';
-  document.getElementById('progress-pct').textContent  = pct + '%';
-  document.getElementById('progress-label').textContent = `✨ ${done} of ${total} completed`;
-  document.getElementById('streak-label').textContent   = `🔥 ${done} done`;
-
-  // Empty state
-  document.getElementById('empty-state').classList.toggle('show', visible.length === 0);
-
-  // Tasks
-  document.getElementById('task-list').innerHTML = visible.map(t => `
-    <div class="task${t.done ? ' done' : ''}" data-id="${t.id}">
-      <div class="task-check" onclick="toggleDone(${t.id})">
-        <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
-          <path d="M1 4l3 3 6-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="task-body">
-        <div class="task-text">${esc(t.text)}</div>
-      </div>
-      <span class="cat-badge" data-cat="${t.cat}">${CAT_EMOJI[t.cat]} ${t.cat}</span>
-      <button class="del-btn" onclick="deleteTask(${t.id})" title="Delete">🗑️</button>
-    </div>
-  `).join('');
-}
-
-// ── START ──────────────────────────────────────────
-render();
-</script>
-</body>
-</html>
