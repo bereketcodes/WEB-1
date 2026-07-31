@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=h1, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+         body h1{ 
+            background-color: red;
+            color: white;
+        } 
+    </style>
+</head>
+<body>
+    <h1 id="h">hello</h1>
+    <div id="example1">This is the original content using innerHTML.</div>
+    <div id="example2">This is the original text content using textContent.</div>
+
+    <button onclick="change()">Change Content</button>
+
+    <script>
+        // Function to change content
+       const change = function(){
+        const example1 = document.getElementbyId("example1");
+        const example2 = document.getElementbyId("example2");
+        example1.innerHTML = "Content changed with innerHTML!";
+        example2.textContent = "Content changed with textContent!";
+    }
+    </script>
+</body>
+</html>
