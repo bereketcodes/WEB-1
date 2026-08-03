@@ -43,9 +43,12 @@
 //     i+= 3;
     
 // }
-let name ="beneyas";
-let names = [];
-for (let i = -1; i <= name.length; i++) {
-  names +=name[i];
-}   
-console.log(names);
+// let name ="beneyas";
+// let names = [];
+// for (let i = -1; i <= name.length; i++) {
+//   names +=name[i];
+// }   
+// console.log(names);
+
+
+// upper case constants

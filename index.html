@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Me</title>
     <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
 
-     <h1>BEREKET</h1>
+     <h1 class = "name"></h1>
      <h2>About me</h2>
      <p>I am a student at Haramaya University.<br/>I am interested in web development and programming.<br/>
    currently studying in insa summer program </p>
@@ -25,18 +26,27 @@
     <p id = "txt"> </p>
 
     
-    <script>
-        let age = 18;
-        let text = "you can't drive";
-        if (age >= 18) {
-            text = "you can drive";
-        }
-         
-        alert(text);
-        alert(4+9);
-        alert("Welcome to my website!");
-        document.getElementById("text").innerHTML = "AI Engineer at OpenAI with ⭐⭐⭐⭐⭐";
-        document.getElementById("txt").innerHTML = text ;
+<script>
+        let x = 2;
+        alert(x);
+        alert(+'1');
+        alert(+x);
+        "use strict";
+
+let counter = 0;
+alert(counter++);
+++counter;
+alert( counter );
+        // alert(+undefined);
+        alert(Boolean(1) );
+
+        myName = confirm("are you beki?");
+         alert(`your name is ${myName}`);
+        
+        document.getElementByClass("name").innerHTML = `<strong>${myName}</strong>`;
+        // document.getElementByClass("text").innerHTML = "AI Engineer at OpenAI with ⭐⭐⭐⭐⭐";
+        // document.getElementById("txt").innerHTML = text ;
+
 
     </script>
 
